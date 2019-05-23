@@ -1,3 +1,4 @@
+
 const {
     MongoClient
 } = require('mongodb');
@@ -5,7 +6,7 @@ const {
 const dbUrl = 'mongodb+srv://baselzag:BBB123@cluster0-5vmay.mongodb.net/test?retryWrites=true';
 const dbName = 'herokuwebDB';
 
-function checkuser(email) {
+function checkUser(email, password, callback) {
     (async function mongo() {
         let client;
         try {
@@ -15,14 +16,15 @@ function checkuser(email) {
             const db = client.db(dbName);
             const col = await db.collection('users');
             const user = await col.findOne({
-                username: email
+                username: email,
+                password: password
             });
             client.close();
-            return user;
+            callback(user);
         } catch (error) {
             console.log(error.message);
             client.close();
-            return null;
+            callback(null);
         }
 
     }());
@@ -59,4 +61,4 @@ function addUser(email, password, callback) {
 }
 
 
-module.exports = {checkuser, addUser};
+module.exports = {checkUser, addUser};
