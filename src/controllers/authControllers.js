@@ -2,7 +2,7 @@ const {
     MongoClient
 } = require('mongodb');
 
-const dbUrl = 'mongodb+srv://lion:jeny@cluster0-rmrmn.mongodb.net/test?retryWrites=true';
+const dbUrl = 'mongodb+srv://baselzag:BBB123@cluster0-5vmay.mongodb.net/test?retryWrites=true';
 const dbName = 'herokuwebDB';
 
 function checkuser(email) {
