@@ -41,7 +41,7 @@ function addUser(email, password, callback) {
             const user = await db.collection('users').findOne({username: email});
             if(user){
                 client.close();
-                callback (false)
+                callback (null)
             }else{
                 const response = await db.collection('users').insertOne({
                     username: email,
@@ -49,12 +49,12 @@ function addUser(email, password, callback) {
                 });
                 //console.log(response);
                 client.close();
-                callback (true);
+                callback (response.ops[0]); // ops : it will show the first object in the array( we find this array wenn we use console.log and we find ops)
             }
         } catch (error) {
             console.log(error.message);
             client.close();
-            callback (false);
+            callback (null); // null means the user is exist
         }
 
     }());

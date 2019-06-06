@@ -1,3 +1,5 @@
+
+
 const express = require('express');
 const { MongoClient } = require('mongodb');
 //const MongoClient = require('mongodb').MongoClient;
@@ -29,11 +31,17 @@ res.render('login',{loginMessage: false});
 authRoutes.route('/login').post((req, res)=>{
     authControllers.checkUser(req.body.email, req.body.password, (user)=>{
 if(user){
+    //console.log(user);
+    req.session.user = user;   // add session
 res.redirect('/admin');
 }
 else{
     res.render('login',{loginMessage: true});
 }
     })
-    });
+});
+authRoutes.route('/logout').get((req, res)=>{
+    req.session.destroy();
+    res.redirect('/');
+});
 module.exports = authRoutes;
