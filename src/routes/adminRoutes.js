@@ -1,5 +1,6 @@
 const express = require('express');
 const multer = require('multer');
+const authControllers = require('../controllers/authControllers');
 const adminRoutes = express.Router();
 
 
@@ -20,10 +21,43 @@ const multerConf = multer.diskStorage({
     }
 });
 const upload = multer({ storage: multerConf });
-adminRoutes.use('/newadd',upload.array('photosInput'));
-adminRoutes.route('/newadd').post((req, res)=>{
-    console.log(req.files);
-res.send(req.files);
+adminRoutes.use('/newadv',upload.array('photosInput'));
+adminRoutes.route('/newadv').post((req, res)=>{
+    authControllers.newAddv(
+        req.body.titleInput,
+        req.body.keywordsInput,
+        req.body.descTextarea,
+        req.body.categorySelect,
+        req.files[0].destination.replace("./public","")+req.files[0].filename,(result)=>{     // replace ./public with nothing
+
+            res.send(req.files);
+
+        }
+        );
+    // console.log(req.body)
+    // console.log(req.files);
+});
+
+
+adminRoutes.route('/changepassword').get((req,res)=>{
+    if(req.session.user){
+        // res.send(req.session.user);
+        // res.send(req.session.user.username);
+
+        res.render('changepassword');
+    }else{
+        res.redirect('/');
+    }
+// res.send('you will change your password here')
+});
+
+adminRoutes.route('/changepassword').post((req,res)=>{
+authControllers.changePassword(req.session.user._id,req.body.changepswInput,(result)=>{
+    req.session.destroy();
+    res.redirect('/auth/login')
+});
+// res.send(req.body.changepswInput)
+
 });
 
 module.exports = adminRoutes;
