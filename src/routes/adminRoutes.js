@@ -30,7 +30,7 @@ adminRoutes.route('/newadv').post((req, res)=>{
         req.body.categorySelect,
         req.files[0].destination.replace("./public","")+req.files[0].filename,(result)=>{     // replace ./public with nothing
 
-            res.send(req.files);
+            res.send(result);
 
         }
         );
